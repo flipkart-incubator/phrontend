@@ -1,5 +1,7 @@
 # PhrontendJS
 
+[![Build Status](https://travis-ci.org/flipkart-incubator/phrontend.svg?branch=master)](https://travis-ci.org/flipkart-incubator/phrontend)
+
 Framework to build rich UIs.
 
 ## LICENSE
