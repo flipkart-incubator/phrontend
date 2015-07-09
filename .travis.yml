@@ -1,0 +1,20 @@
+language: node_js
+node_js:
+- '0.12'
+- '0.10'
+cache:
+  directories:
+  - node_modules
+before_install:
+- npm install -g npm@3
+after_install:
+- npm run lint
+before_script:
+- npm run build
+script:
+- npm test
+matrix:
+  fast_finish: true
+notifications:
+  slack:
+    secure: 3RSMsu5V9qzduxvTYaW5pRxiXW1Jr+jrQ7oYCP7kaeoeyJs8wyzgg2RFU/tAy4y0Pj6LaG70vmQnWVvFdnVD80JyI3WSdNaJvd18gy0TzlP0wgiegSngTg+wGo5e0uMhLU97oJfmnbLOg0tMbkM1dYQlO7u8D/KeXc1Tp2mb/erhdqK1a2GVMELks7llcXq7GS2UIXiqnDQs8f5xxnbTiJXjkg0EblIY0mB9utMMx6Z196minzikylcfX8lMtntAYHM7HYFhIQmkKKrAXv1WhvpQYMWFGAtHE3FhBNEf62e32mYLpVOoaSA8Xvh/M3djPLV/aHPmEKy6qmrm2GxPopFm9RBWQllpJpkM69KlhK+StvUA8bMjV4JOe9LX1GK5mRwo3pH6R/kltWP+D0T4TdO0LPwu18FQbersi/M9+lOSgpkmt4O2aohj7xAmX4nyVio9CAFDjMRVMDEM9dx24wMLSoR0994DWDe9pI1EAzJzeK/TPKszIJoVhapRzIDHv/aP+Jp1mZ0bFWWv62JGtQq5II5nrYfHUaSj4xZQ58PZfYJ1TZfk69PrZdGPVdtAu7GmUjf2gkc4N60LaMV37c4ceYmYlZxu9qcm+y+g0QF3DwN2TXGbWRplakWT4Y+Dfb3hXPg8OUi5IyMwE3WpMuleXDG8R2UUbQPgycMl1VE=
