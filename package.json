@@ -1,0 +1,45 @@
+{
+  "name": "phrontend",
+  "version": "0.0.1",
+  "dependencies": {
+    "ampersand-collection": "^1.4.5",
+    "ampersand-state": "^4.5.4",
+    "bluebird": "^2.9.25",
+    "flux": "^2.0.3",
+    "lodash.isarray": "^3.0.4",
+    "lodash.isstring": "^3.0.1",
+    "lodash.isundefined": "^3.0.1",
+    "lodash.result": "^3.1.2",
+    "object-assign": "^2.0.0",
+    "whatwg-fetch": "^0.8.1"
+  },
+  "license": "Apache-2.0",
+  "peerDependencies": {
+    "react": "~0.13.3",
+    "react-router": "~0.13.3"
+  },
+  "description": "A framework to build rich UIs",
+  "main": "lib/index.js",
+  "devDependencies": {
+    "babel": "^5.6.14",
+    "babel-eslint": "^3.1.15",
+    "babel-jest": "^5.2.0",
+    "eslint": "^0.20.0",
+    "in-publish": "^1.1.1",
+    "verify-git-tag": "^0.3.0"
+  },
+  "scripts": {
+    "build": "babel src/*.js --out-dir lib --copy-files",
+    "lint": "eslint src/*.js",
+    "prepublish": "in-publish && npm run build && verify-git-tag -v || in-install",
+    "watch": "babel src --out-dir lib --copy-files --watch"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/flipkart-incubator/phrontend"
+  },
+  "bugs": "https://github.com/flipkart-incubator/phrontend/issues",
+  "keywords": [
+    "phrontend"
+  ]
+}
