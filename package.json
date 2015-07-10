@@ -29,7 +29,7 @@
     "verify-git-tag": "^0.3.0"
   },
   "scripts": {
-    "build": "babel src/*.js --out-dir lib --copy-files",
+    "build": "babel src --out-dir lib --copy-files",
     "lint": "eslint src/*.js",
     "prepublish": "in-publish && npm run build && verify-git-tag -v || in-install",
     "watch": "babel src --out-dir lib --copy-files --watch"
