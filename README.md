@@ -1,8 +1,22 @@
-# PhrontendJS
+# Phrontend
 
 [![Build Status](https://travis-ci.org/flipkart-incubator/phrontend.svg?branch=master)](https://travis-ci.org/flipkart-incubator/phrontend)
 
 Framework to build rich UIs.
+
+Phrontend is a [flux](https://facebook.github.io/flux) implementation with [ampersand-state](https://github.com/AmpersandJS/ampersand-state) and [ampersand-collection](https://github.com/AmpersandJS/ampersand-collection) as Stores.
+
+## Install
+
+```sh
+npm install phrontend --save
+```
+
+## Dependencies
+
+From npm@3, you must install `react` and `react-router` manually. (https://github.com/npm/npm/releases/tag/v3.0.0 - Peer dependencies are no longer implicitly installed).
+
+`Optional` - [phrontend-webpack](https://github.com/flipkart-incubator/phrontend-webpack) - a webpack config maker customized for phrontend apps.
 
 ## LICENSE
 
