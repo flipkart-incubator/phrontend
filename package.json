@@ -24,14 +24,11 @@
     "babel": "^5.6.14",
     "babel-eslint": "^3.1.15",
     "babel-jest": "^5.2.0",
-    "eslint": "^0.20.0",
-    "in-publish": "^1.1.1",
-    "verify-git-tag": "^0.3.0"
+    "eslint": "^0.20.0"
   },
   "scripts": {
     "build": "babel src --out-dir lib --copy-files",
     "lint": "eslint src/*.js",
-    "prepublish": "in-publish && npm run build && verify-git-tag -v || in-install",
     "watch": "babel src --out-dir lib --copy-files --watch"
   },
   "repository": {
