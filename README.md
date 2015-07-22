@@ -38,8 +38,8 @@ import { Dispatcher } from 'phrontend';
 import {INCREMENT_COUNTER, DECREMENT_COUNTER} from './ActionTypes';
 
 function ActionCreatorCreator(action){
-    return function(data) {
-        Dispatcher.dispatch(action, data);
+    return function(...data) {
+        Dispatcher.dispatch(action, ...data);
     };
 }
 
