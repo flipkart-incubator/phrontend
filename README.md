@@ -20,6 +20,149 @@ From npm@3, you must install `react` and `react-router` manually. (https://githu
 
 `Optional` - [phrontend-webpack](https://github.com/flipkart-incubator/phrontend-webpack) - a webpack config maker customized for phrontend apps.
 
+## Basic Usage
+
+Lets create a simple counter application.
+
+#### ActionTypes.js
+Defining the action types.
+```js
+export const INCREMENT_COUNTER = 'INCREMENT_COUNTER';
+export const DECREMENT_COUNTER = 'DECREMENT_COUNTER';
+```
+
+#### CounterActionCreator.js
+Lets create the action creators for the defined actions.
+```js
+import { Dispatcher } from 'phrontend';
+import {INCREMENT_COUNTER, DECREMENT_COUNTER} from './ActionTypes';
+
+function ActionCreatorCreator(action){
+    return function(data) {
+        Dispatcher.dispatch(action, data);
+    };
+}
+
+export const increment = ActionCreatorCreator(INCREMENT_COUNTER);
+export const decrement = ActionCreatorCreator(DECREMENT_COUNTER);
+```
+
+
+#### CounterState.js
+Define the state of the counter
+```js
+import {State} from 'phrontend';
+
+export default State.extend({
+  props: {
+    count: 'number'
+  }
+});
+```
+
+#### CounterStore.js
+```js
+import {Store} from 'phrontend';
+import CounterState from './CounterState';
+
+export default Store.create({
+  state: CounterState,
+  handler(payload) {
+    // handle initial state
+    if (!this.get('count')) this.set('count', 0);
+    // this function will be executed in the context of the state's instance
+    switch(payload.actionType) {
+      case INCREMENT_COUNTER:
+        // increment the counter to the absolute value of the data sent
+        this.set('count', this.get('count') + payload.data);
+        // and emit the change event for the subscribers (views) to update themselves
+        this.emitChange();
+        break;
+      case DECREMENT_COUNTER:
+        this.set('count', this.get('count') - payload.data);
+        this.emitChange();
+    }
+  }
+});
+```
+
+
+#### CounterComponent.js
+
+```js
+import React from 'react';
+import CounterStore from './CounterStore';
+import {increment, decrement} from './CounterActionCreator';
+
+export default React.createClass({
+  constructor(...args) {
+    super(...args);
+    this.state = {
+      step: 1,
+      count: 0,
+    }
+  }
+  componentDidMount() {
+    // subscribe to the change events published by the store this view
+    // wants to listen to
+    CounterStore.subscribe(this.handleChange);
+  }
+  componentWillUnmount() {
+    // cleanup - unsubscribe from the store
+    CounterStore.unsubscribe(this.handleChange);
+  }
+  // handle the change emitted by the store
+  handleChange() {
+    this.setState({
+      // .get is synchronous
+      count: CounterStore.get('count')
+    });
+  }
+  handleStepChange(e) {
+    // this is to maintain the step value
+    this.setState({
+      step: e.target.value ? parseInt(e.target.value) : 0
+    });
+  }
+  increment() {
+    increment(this.state.step);
+  }
+  decrement() {
+    decrement(this.state.step);
+  }
+  render() {
+    let buttonStyle = {
+      margin: 5,
+      fontSize: 20,
+    };
+    return <div>
+      Current Value: {this.state.count}
+      <div>
+        <button style={buttonStyle} onClick={this.decrement}>-</button>
+        <button style={buttonStyle} onClick={this.increment}>+</button>
+      </div>
+      <div>Step : <input onChange={this.handleStepChange} value={this.state.step}/></div>
+    </div>;
+  }
+});
+```
+
+#### App.js
+
+```js
+import CounterComponent from './CounterComponent';
+
+window.addEventListener('DOMContentLoaded', function() {
+    //Append the component to the container
+  React.render(<CounterComponent/>, document.getElementById('container'));
+});
+
+```
+
++ Check the complete source code here [phrontend-counter](https://github.com/boopathi/phrontend-counter)
+
++ For an advanced example with async flux stores & [phrontend-webpack](https://github.com/flipkart-incubator/phrontend-webpack), Check out [phrontend-example](https://github.com/vigneshshanmugam/phrontend-example)
+
 ## LICENSE
 
 Copyright 2015 Flipkart Internet Pvt. Ltd.
