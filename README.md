@@ -1,6 +1,8 @@
 # Phrontend
 
 [![Build Status](https://travis-ci.org/flipkart-incubator/phrontend.svg?branch=master)](https://travis-ci.org/flipkart-incubator/phrontend)
+[![Code Climate](https://codeclimate.com/github/flipkart-incubator/phrontend/badges/gpa.svg)](https://codeclimate.com/github/flipkart-incubator/phrontend)
+[![Test Coverage](https://codeclimate.com/github/flipkart-incubator/phrontend/badges/coverage.svg)](https://codeclimate.com/github/flipkart-incubator/phrontend/coverage)
 
 Framework to build rich UIs.
 
