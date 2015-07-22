@@ -94,7 +94,7 @@ import React from 'react';
 import CounterStore from './CounterStore';
 import {increment, decrement} from './CounterActionCreator';
 
-export default React.createClass({
+export default class extends React.Component {
   constructor(...args) {
     super(...args);
     this.state = {
@@ -105,11 +105,11 @@ export default React.createClass({
   componentDidMount() {
     // subscribe to the change events published by the store this view
     // wants to listen to
-    CounterStore.subscribe(this.handleChange);
+    CounterStore.subscribe(this.handleChange.bind(this));
   }
   componentWillUnmount() {
     // cleanup - unsubscribe from the store
-    CounterStore.unsubscribe(this.handleChange);
+    CounterStore.unsubscribe(this.handleChange.bind(this));
   }
   // handle the change emitted by the store
   handleChange() {
@@ -138,13 +138,13 @@ export default React.createClass({
     return <div>
       Current Value: {this.state.count}
       <div>
-        <button style={buttonStyle} onClick={this.decrement}>-</button>
-        <button style={buttonStyle} onClick={this.increment}>+</button>
+        <button style={buttonStyle} onClick={this.decrement.bind(this)}>-</button>
+        <button style={buttonStyle} onClick={this.increment.bind(this)}>+</button>
       </div>
-      <div>Step : <input onChange={this.handleStepChange} value={this.state.step}/></div>
+      <div>Step : <input onChange={this.handleStepChange.bind(this)} value={this.state.step}/></div>
     </div>;
   }
-});
+}
 ```
 
 #### App.js
