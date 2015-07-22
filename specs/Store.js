@@ -45,12 +45,14 @@ describe('Store', function() {
       }
     });
 
-		it('should have basic functions defined', function() {
+		it('should have basic functions and properties defined', function() {
 			expect(storeInstance.emitChange).to.be.a('function');
 			expect(storeInstance.emitError).to.be.a('function');
 			expect(storeInstance.subscribe).to.be.a('function');
 			expect(storeInstance.unsubscribe).to.be.a('function');
 			expect(storeInstance.get).to.be.a('function');
+			expect(storeInstance.dispatchToken).to.be.a('string');
+			expect(storeInstance.dispatcher).to.equal(Dispatcher);
 		});
 
 		describe('.emitChange(data)', function() {
