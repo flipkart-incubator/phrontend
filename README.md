@@ -64,6 +64,7 @@ export default State.extend({
 ```js
 import {Store} from 'phrontend';
 import CounterState from './CounterState';
+import {INCREMENT_COUNTER, DECREMENT_COUNTER} from './ActionTypes';
 
 export default Store.create({
   state: CounterState,
@@ -150,6 +151,7 @@ export default class extends React.Component {
 #### App.js
 
 ```js
+import React from 'react';
 import CounterComponent from './CounterComponent';
 
 window.addEventListener('DOMContentLoaded', function() {
