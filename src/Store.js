@@ -3,7 +3,7 @@ import AppDispatcher from './AppDispatcher';
 export default class Store {
   static create(options) {
 
-    let instance = options.state ? new options.state({parse: true}) : new options.collection({parse: true});
+    let instance = options.state ? new options.state() : new options.collection();
 
     instance.emitChange = (data) => {
       instance.trigger('onChange', data);
