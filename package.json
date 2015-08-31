@@ -22,10 +22,11 @@
   "main": "lib/index.js",
   "devDependencies": {
     "babel": "^5.6.14",
-    "babel-eslint": "^3.1.15",
+    "babel-eslint": "^4.1.0",
     "chai": "^3.2.0",
     "chai-spies": "^0.6.0",
-    "eslint": "^0.20.0",
+    "eslint": "^1.3.1",
+    "eslint-config-phrontend": "0.0.2",
     "istanbul": "^0.3.17",
     "mocha": "^2.2.5"
   },
