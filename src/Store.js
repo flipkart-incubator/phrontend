@@ -1,7 +1,7 @@
 import AppDispatcher from './AppDispatcher';
-import {EventEmitter} from 'fbemitter';
+import {EventEmitter2} from 'eventemitter2';
 
-export default class Store extends EventEmitter {
+export default class Store extends EventEmitter2 {
   // to be compatible with the existing phrontend
   static create(...args) {
     return new Store(...args);
@@ -9,7 +9,6 @@ export default class Store extends EventEmitter {
   constructor({initialState = {}, handler}) {
     super();
     this.state = initialState;
-    this.subscriptions = new Map();
 
     this.dispatcher = AppDispatcher;
     this.dispatchToken = AppDispatcher.register(handler.bind(this));
@@ -18,27 +17,29 @@ export default class Store extends EventEmitter {
     return attr ? this.state[attr] : this.toJSON();
   }
   set(attr, val) {
-    this.state[attr] = val;
+    if (typeof attr === 'object') this.state = attr;
+    else this.state[attr] = val;
+  }
+  // to be backward compatible
+  parse(data) {
+    return 'string' === typeof data ? JSON.parse(data) : data;
   }
   // to be backward compatible
   toJSON() {
     return JSON.parse(JSON.stringify(this.state));
   }
-  emitChange(data) {
-    this.emit('onchange', data);
+  emitChange(...data) {
+    this.emit('change', ...data);
   }
-  emitError(err) {
-    this.emit('onerror', err);
+  emitError(...err) {
+    this.emit('err', ...err);
   }
   subscribe(success, error) {
-    this.subscriptions.set(success, this.addListener('onchange', success));
-    error && this.subscriptions.set(error, this.addListener('onerror', error));
+    this.on('change', success);
+    error && this.on('err', error);
   }
-  unsubscribe(...eventHandlers) {
-    eventHandlers.map(e => {
-      if (!this.subscriptions.has(e)) return;
-      this.subscriptions.get(e).remove();
-      this.subscriptions.delete(e);
-    });
+  unsubscribe(success, error) {
+    success && this.off('change', success);
+    error && this.off('err', error);
   }
 }
