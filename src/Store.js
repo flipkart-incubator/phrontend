@@ -37,8 +37,7 @@ export default class Store extends EventEmitter {
   unsubscribe(...eventHandlers) {
     eventHandlers.map(e => {
       if (!this.subscriptions.has(e)) return;
-      let listener = this.subscriptions.get(e);
-      listener.remove();
+      this.subscriptions.get(e).remove();
       this.subscriptions.delete(e);
     });
   }
