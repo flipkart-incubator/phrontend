@@ -17,7 +17,7 @@ export default class Store extends EventEmitter2 {
     return attr ? this.state[attr] : this.toJSON();
   }
   set(attr, val) {
-    if (typeof attr === 'object') this.state = attr;
+    if (typeof attr === 'object') Object.assign(this.state, attr);
     else this.state[attr] = val;
   }
   // to be backward compatible
