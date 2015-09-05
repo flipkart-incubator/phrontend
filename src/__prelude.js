@@ -3,9 +3,9 @@
 import assign from 'object-assign';
 if (!Object.assign) Object.assign = assign;
 
-// Put Promise in the global scope
-import BPromise from 'bluebird';
-window.Promise = BPromise;
+// // Put Promise in the global scope
+// import BPromise from 'bluebird';
+// window.Promise = BPromise;
 
 // Fetch exposes fetch function,
 // Request, Header, Response classes to window
@@ -15,6 +15,5 @@ const __DEV__ = (process.env.NODE_ENV !== 'production');
 const __PROD__ = !__DEV__;
 
 if (__DEV__) {
-  Promise.longStackTraces();
   Error.stackTraceLimit = Infinity;
 }
