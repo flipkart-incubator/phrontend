@@ -1,38 +1,44 @@
 import AppDispatcher from './AppDispatcher';
+import {EventEmitter} from 'fbemitter';
 
-export default class Store {
-  static create(options) {
+export default class Store extends EventEmitter {
+  // to be compatible with the existing phrontend
+  static create(...args) {
+    return new Store(...args);
+  }
+  constructor({initialState = {}, handler}) {
+    super();
+    this.state = initialState;
+    this.subscriptions = new WeakMap();
 
-    let instance = options.state ? new options.state() : new options.collection();
-
-    instance.emitChange = (data) => {
-      instance.trigger('onChange', data);
-    };
-
-    instance.subscribe = (successCallback, errorCallback) => {
-      instance.on('onChange', successCallback);
-      errorCallback && instance.on('onError', errorCallback);
-    };
-
-    instance.unsubscribe = (successCallback, errorCallback) => {
-      successCallback && instance.off('onChange', successCallback);
-      errorCallback && instance.off('onError', errorCallback);
-    };
-
-    instance.emitError = (err) => {
-      instance.trigger('onError', err);
-    };
-
-    let _get = instance.get;
-
-    instance.get = (attr) => {
-      return attr ? _get.call(instance, attr) : instance.toJSON();
-    };
-
-    instance.dispatcher = AppDispatcher;
-
-    instance.dispatchToken = AppDispatcher.register(options.handler.bind(instance));
-
-    return instance;
+    this.dispatcher = AppDispatcher;
+    this.dispatchToken = AppDispatcher.register(handler.bind(this));
+  }
+  get(attr) {
+    return attr ? this.state[attr] : this.toJSON();
+  }
+  set(attr, val) {
+    this.state[attr] = val;
+  }
+  // to be backward compatible
+  toJSON() {
+    return JSON.parse(JSON.stringify(this.state));
+  }
+  emitChange(data) {
+    this.emit('onchange', data);
+  }
+  emitError(err) {
+    this.emit('onerror', err);
+  }
+  subscribe(success, error) {
+    this.subscriptions.set(success, this.addListener('onchange', success));
+    error && this.subscriptions.set(error, this.addListener('onerror', error));
+  }
+  unsubscribe(...events) {
+    events.map(e => {
+      let listener = this.subscriptions.get(e);
+      listener.remove();
+      this.subscriptions.delete(e);
+    });
   }
 }
