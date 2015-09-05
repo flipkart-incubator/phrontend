@@ -26,7 +26,7 @@
   },
   "scripts": {
     "build": "babel src --out-dir lib --copy-files --loose",
-    "lint": "eslint src/*.js",
+    "lint": "eslint src/*.js specs/*.js",
     "watch": "babel src --out-dir lib --copy-files --watch",
     "test": "mocha --compilers js:babel/register specs --require specs/helpers/chai.js",
     "cover": "istanbul cover _mocha specs -- --compilers js:babel/register specs --require specs/helpers/chai.js"
