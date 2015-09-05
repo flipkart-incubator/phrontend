@@ -27,7 +27,7 @@
     "mocha": "^2.2.5"
   },
   "scripts": {
-    "build": "babel src --out-dir lib --copy-files",
+    "build": "babel src --out-dir lib --copy-files --loose",
     "lint": "eslint src/*.js",
     "watch": "babel src --out-dir lib --copy-files --watch",
     "test": "mocha --compilers js:babel/register specs --require specs/helpers/chai.js",
