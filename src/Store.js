@@ -9,7 +9,7 @@ export default class Store extends EventEmitter {
   constructor({initialState = {}, handler}) {
     super();
     this.state = initialState;
-    this.subscriptions = new WeakMap();
+    this.subscriptions = new Map();
 
     this.dispatcher = AppDispatcher;
     this.dispatchToken = AppDispatcher.register(handler.bind(this));
@@ -34,8 +34,9 @@ export default class Store extends EventEmitter {
     this.subscriptions.set(success, this.addListener('onchange', success));
     error && this.subscriptions.set(error, this.addListener('onerror', error));
   }
-  unsubscribe(...events) {
-    events.map(e => {
+  unsubscribe(...eventHandlers) {
+    eventHandlers.map(e => {
+      if (!this.subscriptions.has(e)) return;
       let listener = this.subscriptions.get(e);
       listener.remove();
       this.subscriptions.delete(e);
