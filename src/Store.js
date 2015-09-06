@@ -21,11 +21,15 @@ export function createStore(handler, initialState) {
 
   // get is accessible in store as well as state
   let get = attr => attr ? value[attr] : value;
+  let dispatcher = AppDispatcher;
+  let dispatcherToken = AppDispatcher.register(payload => {
+    handler(payload, state);
+  });
 
   /**
    * State properties
    * ones that are accessible inside handler
-   * get, set, emitChange, emitError
+   * get, set, emitChange, emitError, dispatcher, dispatcherToken
    */
   state.get = get;
 
@@ -41,6 +45,8 @@ export function createStore(handler, initialState) {
 
   state.emitChange = data => emitter.emit('change', data);
   state.emitError = err => emitter.emit('err', err);
+  state.dispatcher = dispatcher;
+  state.dispatcherToken = dispatcherToken;
 
   /**
    * Store properties
@@ -56,11 +62,8 @@ export function createStore(handler, initialState) {
     success && emitter.off('change', success);
     error && emitter.off('err', error);
   };
-
-  store.dispatcher = AppDispatcher;
-  store.dispatchToken = AppDispatcher.register(payload => {
-    handler(payload, state);
-  });
+  store.dispatcher = dispatcher;
+  store.dispatchToken = dispatcherToken;
 
   return store;
 }
