@@ -1,45 +1,66 @@
 import AppDispatcher from './AppDispatcher';
 import {EventEmitter2} from 'eventemitter2';
+import cloneDeep from 'lodash.cloneDeep';
 
-export default class Store extends EventEmitter2 {
-  // to be compatible with the existing phrontend
-  static create(...args) {
-    return new Store(...args);
-  }
-  constructor({initialState = {}, handler}) {
-    super();
-    this.state = initialState;
+function deepFreeze(o) {
+  let props = Object.getOwnPropertyNames(o);
+  props.forEach(name => {
+    let prop = o[name];
+    if (typeof prop === 'object' && !Object.isFrozen(prop)) deepFreeze(prop);
+  });
+  return Object.freeze(o);
+}
 
-    this.dispatcher = AppDispatcher;
-    this.dispatchToken = AppDispatcher.register(handler.bind(this));
-  }
-  get(attr) {
-    return attr ? this.state[attr] : this.toJSON();
-  }
-  set(attr, val) {
-    if (typeof attr === 'object') Object.assign(this.state, attr);
-    else this.state[attr] = val;
-  }
-  // to be backward compatible
-  parse(data) {
-    return 'string' === typeof data ? JSON.parse(data) : data;
-  }
-  // to be backward compatible
-  toJSON() {
-    return JSON.parse(JSON.stringify(this.state));
-  }
-  emitChange(...data) {
-    this.emit('change', ...data);
-  }
-  emitError(...err) {
-    this.emit('err', ...err);
-  }
-  subscribe(success, error) {
-    this.on('change', success);
-    error && this.on('err', error);
-  }
-  unsubscribe(success, error) {
-    success && this.off('change', success);
-    error && this.off('err', error);
-  }
+export function createStore(handler, initialState) {
+  let store = {};
+  let state = {};
+
+  // value is the actual state value
+  let value = deepFreeze(initialState);
+  let emitter = new EventEmitter2();
+
+  // get is accessible in store as well as state
+  let get = attr => attr ? value[attr] : value;
+
+  /**
+   * State properties
+   * ones that are accessible inside handler
+   * get, set, emitChange, emitError
+   */
+  state.get = get;
+
+  // FIXME
+  // should be very very slow
+  // trying out a POC
+  state.set = (attr, val) => {
+    let newState = cloneDeep(value);
+    if (typeof attr === 'object') Object.extend(newState, attr);
+    else newState[attr] = val;
+    value = deepFreeze(newState);
+  };
+
+  state.emitChange = data => emitter.emit('change', data);
+  state.emitError = err => emitter.emit('err', err);
+
+  /**
+   * Store properties
+   * ones that are accessible in view or anywhere else in app
+   * get, subscribe, unsubscribe, dispatcher, dispatcherToken
+   */
+  store.get = get;
+  store.subscribe = (success, error) => {
+    emitter.on('change', success);
+    error && emitter.on('err', error);
+  };
+  store.unsubscribe = (success, error) => {
+    success && emitter.off('change', success);
+    error && emitter.off('err', error);
+  };
+
+  store.dispatcher = AppDispatcher;
+  store.dispatchToken = AppDispatcher.register(payload => {
+    handler(payload, state);
+  });
+
+  return store;
 }
