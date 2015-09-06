@@ -1,22 +1,17 @@
 import AppDispatcher from './AppDispatcher';
 import {EventEmitter2} from 'eventemitter2';
 import cloneDeep from 'lodash.cloneDeep';
-
-function deepFreeze(o) {
-  let props = Object.getOwnPropertyNames(o);
-  props.forEach(name => {
-    let prop = o[name];
-    if (typeof prop === 'object' && !Object.isFrozen(prop)) deepFreeze(prop);
-  });
-  return Object.freeze(o);
-}
+import readOnly from './read-only';
+import difference from 'lodash.difference';
 
 export function createStore(handler, initialState) {
   let store = {};
   let state = {};
 
   // value is the actual state value
-  let value = deepFreeze(initialState);
+  let rwValue = cloneDeep(initialState);
+  let value = readOnly(rwValue);
+
   let emitter = new EventEmitter2();
 
   // get is accessible in store as well as state
@@ -32,17 +27,16 @@ export function createStore(handler, initialState) {
    * get, set, emitChange, emitError, dispatcher, dispatcherToken
    */
   state.get = get;
-
-  // FIXME
-  // should be very very slow
-  // trying out a POC
   state.set = (attr, val) => {
-    let newState = cloneDeep(value);
-    if (typeof attr === 'object') Object.extend(newState, attr);
-    else newState[attr] = val;
-    value = deepFreeze(newState);
+    if (typeof attr === 'object') {
+      Object.assign(rwValue, attr);
+    } else {
+      let shouldForceUpdate = !Object.prototype.hasOwnProperty.call(rwValue, attr);
+      rwValue[attr] = val;
+      if (shouldForceUpdate) value = readOnly(rwValue);
+    }
+    Platform.performMicrotaskCheckpoint();
   };
-
   state.emitChange = data => emitter.emit('change', data);
   state.emitError = err => emitter.emit('err', err);
   state.dispatcher = dispatcher;

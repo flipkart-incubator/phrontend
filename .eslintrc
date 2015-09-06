@@ -1,3 +1,6 @@
 {
-  "extends": "phrontend"
+  "extends": "phrontend",
+  "globals": {
+    "Platform": true
+  }
 }
