@@ -6,7 +6,7 @@
 
 Framework to build rich UIs.
 
-Phrontend is a [flux](https://facebook.github.io/flux) implementation with [ampersand-state](https://github.com/AmpersandJS/ampersand-state) and [ampersand-collection](https://github.com/AmpersandJS/ampersand-collection) as Stores.
+Phrontend is a [flux](https://facebook.github.io/flux) implementation.
 
 ## Install
 
@@ -22,7 +22,7 @@ From npm@3, you must install `react` and `react-router` manually. (https://githu
 
 ## Basic Usage
 
-Lets create a simple counter application.
+Let's create a simple counter application.
 
 #### ActionTypes.js
 Defining the action types.
@@ -32,46 +32,29 @@ export const DECREMENT_COUNTER = 'DECREMENT_COUNTER';
 ```
 
 #### CounterActionCreator.js
-Lets create the action creators for the defined actions.
+
+Let's create the action creators for the defined actions.
+
 ```js
-import { Dispatcher } from 'phrontend';
+import {Dispatcher} from 'phrontend';
 import {INCREMENT_COUNTER, DECREMENT_COUNTER} from './ActionTypes';
 
-function ActionCreatorCreator(action){
-    return function(...data) {
-        Dispatcher.dispatch(action, ...data);
-    };
-}
-
-export const increment = ActionCreatorCreator(INCREMENT_COUNTER);
-export const decrement = ActionCreatorCreator(DECREMENT_COUNTER);
-```
-
-
-#### CounterState.js
-Define the state of the counter
-```js
-import {State} from 'phrontend';
-
-export default State.extend({
-  props: {
-    count: 'number'
-  }
-});
+export let increment = step => Dispatcher.dispatch(INCREMENT_COUNTER, step);
+export let decrement = step => Dispatcher.dispatch(DECREMENT_COUNTER, step);
 ```
 
 #### CounterStore.js
+
 ```js
 import {Store} from 'phrontend';
-import CounterState from './CounterState';
 import {INCREMENT_COUNTER, DECREMENT_COUNTER} from './ActionTypes';
 
-export default Store.create({
-  state: CounterState,
+const initialState = {
+  count: 0
+};
+
+class CounterStore extends Store {
   handler(payload) {
-    // handle initial state
-    if (!this.get('count')) this.set('count', 0);
-    // this function will be executed in the context of the state's instance
     switch(payload.actionType) {
       case INCREMENT_COUNTER:
         // increment the counter to the absolute value of the data sent
@@ -84,7 +67,9 @@ export default Store.create({
         this.emitChange();
     }
   }
-});
+}
+
+export default new CounterStore(initialState);
 ```
 
 
@@ -98,6 +83,8 @@ import {increment, decrement} from './CounterActionCreator';
 export default class extends React.Component {
   constructor(...args) {
     super(...args);
+    this.handleChange = this.handleChange.bind(this);
+    this.handleStepChange = this.handleStepChange.bind(this);
     this.state = {
       step: 1,
       count: 0,
@@ -106,11 +93,11 @@ export default class extends React.Component {
   componentDidMount() {
     // subscribe to the change events published by the store this view
     // wants to listen to
-    CounterStore.subscribe(this.handleChange.bind(this));
+    CounterStore.subscribe(this.handleChange);
   }
   componentWillUnmount() {
     // cleanup - unsubscribe from the store
-    CounterStore.unsubscribe(this.handleChange.bind(this));
+    CounterStore.unsubscribe(this.handleChange);
   }
   // handle the change emitted by the store
   handleChange() {
@@ -125,24 +112,14 @@ export default class extends React.Component {
       step: e.target.value ? parseInt(e.target.value) : 0
     });
   }
-  increment() {
-    increment(this.state.step);
-  }
-  decrement() {
-    decrement(this.state.step);
-  }
   render() {
-    let buttonStyle = {
-      margin: 5,
-      fontSize: 20,
-    };
     return <div>
       Current Value: {this.state.count}
       <div>
-        <button style={buttonStyle} onClick={this.decrement.bind(this)}>-</button>
-        <button style={buttonStyle} onClick={this.increment.bind(this)}>+</button>
+        <button style={buttonStyle} onClick={decrement.bind(null, this.state.step)}>-</button>
+        <button style={buttonStyle} onClick={increment.bind(null, this.state.step)}>+</button>
       </div>
-      <div>Step : <input onChange={this.handleStepChange.bind(this)} value={this.state.step}/></div>
+      <div>Step : <input onChange={this.handleStepChange} value={this.state.step}/></div>
     </div>;
   }
 }
