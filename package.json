@@ -1,6 +1,6 @@
 {
   "name": "phrontend",
-  "version": "0.0.3",
+  "version": "0.1.0-alpha",
   "dependencies": {
     "eventemitter3": "~1.1.1",
     "flux": "~2.1.1",
