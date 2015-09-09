@@ -1,38 +1,73 @@
 import AppDispatcher from './AppDispatcher';
+import EventEmitter from 'eventemitter3';
 
-export default class Store {
-  static create(options) {
+const CHANGE = 'change';
+const ERROR = 'error';
 
-    let instance = options.state ? new options.state() : new options.collection();
+export default class Store extends EventEmitter {
+  constructor(initialState = {}) {
+    super();
 
-    instance.emitChange = (data) => {
-      instance.trigger('onChange', data);
-    };
+    // Store to be used only as an Abstract class
+    if (this.constructor === Store)
+      throw new Error('Store is an abstract class');
 
-    instance.subscribe = (successCallback, errorCallback) => {
-      instance.on('onChange', successCallback);
-      errorCallback && instance.on('onError', errorCallback);
-    };
+    this.state = initialState;
+    this.handler = this.handler.bind(this);
 
-    instance.unsubscribe = (successCallback, errorCallback) => {
-      successCallback && instance.off('onChange', successCallback);
-      errorCallback && instance.off('onError', errorCallback);
-    };
+    this.dispatcher = AppDispatcher;
+    this.dispatchToken = AppDispatcher.register(this.handler);
+  }
+  /*
+   * State APIs
+   */
+  get(attr) {
+    return attr ? this.state[attr] : this.state;
+  }
+  set(attr, val) {
+    if (typeof attr === 'object') Object.assign(this.state, attr);
+    else this.state[attr] = val;
+  }
+  parse(data) {
+    return typeof data === 'string' ? JSON.parse(data) : data;
+  }
+  toJSON() {
+    return JSON.parse(JSON.stringify(this.state));
+  }
+  emitChange(data) {
+    this.emit(CHANGE, data);
+  }
+  emitError(err) {
+    this.emit(ERROR, err);
+  }
+  /*
+   * Store APIs
+   */
+  subscribe(success, error) {
+    this.on(CHANGE, success);
+    error && this.on(ERROR, error);
+  }
+  unsubscribe(success, error) {
+    success && this.removeListener(CHANGE, success);
+    error && this.removeListener(ERROR, error);
+  }
 
-    instance.emitError = (err) => {
-      instance.trigger('onError', err);
-    };
-
-    let _get = instance.get;
-
-    instance.get = (attr) => {
-      return attr ? _get.call(instance, attr) : instance.toJSON();
-    };
-
-    instance.dispatcher = AppDispatcher;
-
-    instance.dispatchToken = AppDispatcher.register(options.handler.bind(instance));
-
-    return instance;
+  // for backward compatibility
+  static create(opts) {
+    let actualHandler = opts.handler;
+    if (process.env.NODE_ENV !== 'production') console.warn(
+`Store has moved to a new API. Store.create() will be deprecated. Use
+import {Store} from 'phrontend';
+class MyStore extends Store {
+  handler(payload) { }
+}
+let store = new MyStore(initialState);
+`);
+    class MyStore extends Store {
+      handler(payload) {
+        actualHandler.call(this, payload);
+      }
+    }
+    return new MyStore();
   }
 }

@@ -2,16 +2,34 @@ import './__prelude';
 
 import ApiCaller from './ApiCaller';
 import ApiError from './ApiError';
-import Collection from 'ampersand-collection';
 import Dispatcher from './AppDispatcher';
 import NetworkError from './NetworkError';
-import State from './State';
 import Store from './Store';
 
 export {ApiCaller};
 export {ApiError};
-export {Collection};
 export {Dispatcher};
 export {NetworkError};
-export {State};
 export {Store};
+
+// deprecated notice
+const deprecatedNotice =
+  `ampersand-state and ampersand-collection are removed from phrontend
+  Please use v0.0.3 to use ampersand-state and ampersand-collection`;
+
+let dummyConstructor = function() {
+  if (process.env.NODE_ENV !== 'production') console.error(deprecatedNotice);
+  return {};
+};
+
+export let State = {
+  extend() {
+    return dummyConstructor;
+  }
+};
+
+export let Collection = {
+  extend() {
+    return dummyConstructor;
+  }
+};
