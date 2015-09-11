@@ -1,4 +1,7 @@
-import './__prelude';
+// Prelude
+if (process.env.NODE_ENV !== 'production') {
+  Error.stackTraceLimit = Infinity;
+}
 
 import ApiCaller from './ApiCaller';
 import ApiError from './ApiError';

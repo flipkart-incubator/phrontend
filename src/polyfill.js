@@ -1,13 +1,13 @@
 import assign from 'object-assign';
 if (!Object.assign) Object.assign = assign;
 
+import Promise from 'bluebird';
+if (!window.Promise) window.Promise = Promise;
+
 // Fetch exposes fetch function,
 // Request, Header, Response classes to window
 import 'whatwg-fetch';
 
-const __DEV__ = (process.env.NODE_ENV !== 'production');
-const __PROD__ = !__DEV__;
-
-if (__DEV__) {
+if (process.env.NODE_ENV !== 'production') {
   Error.stackTraceLimit = Infinity;
 }
