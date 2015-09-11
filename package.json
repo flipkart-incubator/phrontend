@@ -2,6 +2,7 @@
   "name": "phrontend",
   "version": "0.1.0-alpha",
   "dependencies": {
+    "bluebird": "~2.10.0",
     "eventemitter3": "~1.1.1",
     "flux": "~2.1.1",
     "object-assign": "~2.0.0",
