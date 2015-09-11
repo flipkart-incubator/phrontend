@@ -9,10 +9,6 @@
     "whatwg-fetch": "~0.9.0"
   },
   "license": "Apache-2.0",
-  "peerDependencies": {
-    "react": "~0.13.3",
-    "react-router": "~0.13.3"
-  },
   "description": "A framework to build rich UIs",
   "main": "lib/index.js",
   "devDependencies": {
