@@ -3,6 +3,9 @@ import EventEmitter from 'eventemitter3';
 
 const CHANGE = 'change';
 const ERROR = 'error';
+const STATE = Symbol();
+
+let clone = o => JSON.parse(JSON.stringify(o));
 
 export default class Store extends EventEmitter {
   constructor(initialState = {}) {
@@ -12,7 +15,7 @@ export default class Store extends EventEmitter {
     if (this.constructor === Store)
       throw new Error('Store is an abstract class');
 
-    this.state = initialState;
+    this[STATE] = initialState;
     this.handler = this.handler.bind(this);
 
     this.dispatcher = AppDispatcher;
@@ -22,17 +25,17 @@ export default class Store extends EventEmitter {
    * State APIs
    */
   get(attr) {
-    return attr ? this.state[attr] : this.state;
+    return attr ? clone(this[STATE][attr]) : clone(this[STATE]);
   }
   set(attr, val) {
-    if (typeof attr === 'object') Object.assign(this.state, attr);
-    else this.state[attr] = val;
+    if (typeof attr === 'object') Object.assign(this[STATE], attr);
+    else this[STATE][attr] = val;
   }
   parse(data) {
     return typeof data === 'string' ? JSON.parse(data) : data;
   }
   toJSON() {
-    return JSON.parse(JSON.stringify(this.state));
+    return clone(this[STATE]);
   }
   emitChange(data) {
     this.emit(CHANGE, data);
