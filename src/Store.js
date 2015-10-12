@@ -3,7 +3,7 @@ import EventEmitter from 'eventemitter3';
 
 const CHANGE = 'change';
 const ERROR = 'error';
-const STATE = Symbol();
+const STATE = 'state';
 
 let clone = o => JSON.parse(JSON.stringify(o));
 
@@ -25,7 +25,7 @@ export default class Store extends EventEmitter {
    * State APIs
    */
   get(attr) {
-    return attr ? clone(this[STATE][attr]) : clone(this[STATE]);
+    return attr ? this[STATE][attr] : this[STATE];
   }
   set(attr, val) {
     if (typeof attr === 'object') Object.assign(this[STATE], attr);
