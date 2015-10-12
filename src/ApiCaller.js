@@ -30,10 +30,7 @@ class ApiCaller {
       'Network request failed'
     ];
 
-    let fetchOptions = {
-      method: config.method,
-      headers: config.headers
-    };
+    let fetchOptions = Object.assign({}, config);
 
     if (reqBody) {
       fetchOptions.body = reqBody;
