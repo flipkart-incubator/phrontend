@@ -30,10 +30,24 @@ class ApiCaller {
       'Network request failed'
     ];
 
-    let fetchOptions = {
-      method: config.method,
-      headers: config.headers
-    };
+    // extract necessary fetchOptions from config
+    // https://fetch.spec.whatwg.org/#requestinit
+    let extracts = [
+      'method',
+      'headers',
+      'body',
+      'referrer',
+      'mode',
+      'credentials',
+      'cache',
+      'redirect',
+      'integrity',
+      'window'
+    ];
+    let fetchOptions = {};
+    extracts.map(key => {
+      if (typeof config[key] !== 'undefined') fetchOptions[key] = config[key];
+    });
 
     if (reqBody) {
       fetchOptions.body = reqBody;
