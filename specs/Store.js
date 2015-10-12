@@ -1,7 +1,8 @@
 import Store from '../src/Store.js';
-import State from 'ampersand-state';
-import Collection from 'ampersand-collection';
 import Dispatcher from '../src/AppDispatcher';
+
+// mocked state and collection
+import {State, Collection} from '../src/index.js';
 
 let noop = () => {};
 
