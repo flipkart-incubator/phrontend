@@ -20,10 +20,12 @@ const deprecatedNotice =
   `ampersand-state and ampersand-collection are removed from phrontend
   Please use v0.0.3 to use ampersand-state and ampersand-collection`;
 
+/* eslint-disable no-console */
 let dummyConstructor = function() {
   if (process.env.NODE_ENV !== 'production') console.error(deprecatedNotice);
   return {};
 };
+/* eslint-enable */
 
 export let State = {
   extend() {

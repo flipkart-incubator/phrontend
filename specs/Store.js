@@ -43,9 +43,7 @@ describe('Store', function() {
 
     storeCollectionInstance = Store.create({
       collection: collectionInstance,
-      handler: function(payload) {
-
-      }
+      handler: function() {}
     });
 
     it('should have basic functions and properties defined', function() {
