@@ -7,6 +7,7 @@ const output = {
   library: 'umd',
   libraryTarget: 'umd'
 };
+const devtool = 'sourcemap';
 
 const babelquery = require('./babel-query');
 
@@ -38,6 +39,7 @@ const minify = new webpack.optimize.UglifyJsPlugin({
   }
 });
 /* eslint-enable */
+
 const envdef = new webpack.DefinePlugin({
   'process.env': {
     NODE_ENV: JSON.stringify(process.env.NODE_ENV)
@@ -50,6 +52,7 @@ module.exports = [
     output: Object.assign({}, output, {
       filename: 'phrontend.js'
     }),
+    devtool,
     module: {
       loaders: [
         Object.assign({}, jsloader, {
@@ -64,6 +67,7 @@ module.exports = [
     output: Object.assign({}, output, {
       filename: 'phrontend.min.js'
     }),
+    devtool,
     module: {
       loaders: [
         Object.assign({}, jsloader, {
@@ -78,6 +82,7 @@ module.exports = [
     output: Object.assign({}, output, {
       filename: 'phrontend.es6.js'
     }),
+    devtool,
     module: {
       loaders: [
         Object.assign({}, jsloader, {

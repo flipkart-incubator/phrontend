@@ -64,7 +64,7 @@ describe('ApiCaller', function() {
   it('should reject with network error if network fails', function(done) {
     ApiCaller.get({ hostname: 'flipkart.com' })
       .then(null, function(err) {
-        expect(err).to.be.an.instanceOf(NetworkError);
+        expect(NetworkError.isNetworkError(err)).to.equal(true);
         done();
       });
   });

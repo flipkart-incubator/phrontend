@@ -1,3 +1,4 @@
+'use strict';
 const babel = require('babel-core');
 const path = require('path');
 const glob = require('glob');
@@ -44,24 +45,22 @@ var builddist = exports.builddist = function() {
   return new Promise((resolve, reject) => {
     webpack(require('./dist.config.js'), (err, stats) => {
       if (err) return reject(err);
-      resolve(stats);
+      let ret = stats.toJson().children.map(comp => comp.assets);
+      resolve(ret);
     });
   });
 };
 
-var build = exports.build = function() {
-  return Promise.all([
-    buildlib(),
-    buildes6(),
-    builddist()
-  ]);
-};
+const flatten = list => list.reduce(
+  (a, b) => a.concat(Array.isArray(b) ? flatten(b) : b), []
+);
 
 /* eslint-disable no-console */
 function run(fn) {
   fn
     .call()
-    .then(outputs => outputs.map(o => console.log(o)))
+    .then(flatten)
+    .then(output => output.map(e => console.log(e)))
     .catch(err => {
       console.error(err);
       throw err;
@@ -81,7 +80,9 @@ if (require.main === module) {
     run(builddist);
     break;
   default:
-    run(build);
+    run(buildlib);
+    run(buildes6);
+    run(builddist);
   }
 }
 /* eslint-enable */
