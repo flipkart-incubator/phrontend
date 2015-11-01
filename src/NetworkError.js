@@ -1,16 +1,15 @@
 const [key, value] = [Symbol(), 'NetworkError'];
 
-export default class NetworkError extends Error {
+export default class NetworkError {
   constructor(message) {
-    super(message);
-
-    this.name = 'NetworkError';
-    this.message = message || 'Network Error';
-
+    let err = new Error(message || 'Network Error');
+    err.name = 'NetworkError';
     // this is for checking isNetworkError
-    this[key] = value;
+    err[key] = value;
+    return err;
   }
   static isNetworkError(err) {
-    return err[key] === value;
+    return err[key] === value
+      && err instanceof Error;
   }
 }

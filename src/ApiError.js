@@ -1,16 +1,17 @@
 const [key, value] = [Symbol(), 'ApiError'];
 
-export default class ApiError extends Error {
+export default class ApiError {
   constructor(message, status, response) {
-    super(message);
-    this.name = 'ApiError';
-    this.message = message || 'Error in API';
-    this.statusCode = status;
-    this.response = response;
+    let err = new Error(message || 'Error in API');
+    err.name = 'ApiError';
+    err.statusCode = status;
+    err.response = response;
     // this is for checking isApiError
-    this[key] = value;
+    err[key] = value;
+    return err;
   }
   static isApiError(err) {
-    return err[key] === value;
+    return err[key] === value
+      && err instanceof Error;
   }
 }
