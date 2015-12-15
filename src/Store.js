@@ -55,6 +55,7 @@ export default class Store extends EventEmitter {
     error && this.removeListener(ERROR, error);
   }
 
+  /* eslint-disable no-console */
   // for backward compatibility
   static create(opts) {
     let actualHandler = opts.handler;
@@ -73,4 +74,5 @@ let store = new MyStore(initialState);
     }
     return new MyStore();
   }
+  /* eslint-enable */
 }

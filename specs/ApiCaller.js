@@ -8,7 +8,7 @@ describe('ApiCaller', function() {
       .then(resp => resp.json())
       .then(resp => {
         expect(resp.method).to.equal('GET');
-        expect(resp.body).to.equal(undefined);
+        expect(resp.body).to.equal(void 0);
         done();
       });
   });
@@ -38,7 +38,7 @@ describe('ApiCaller', function() {
       .then(resp => resp.json())
       .then(resp => {
         expect(resp.method).to.equal('DELETE');
-        expect(resp.body).to.equal(undefined);
+        expect(resp.body).to.equal(void 0);
         done();
       });
   });
@@ -64,7 +64,7 @@ describe('ApiCaller', function() {
   it('should reject with network error if network fails', function(done) {
     ApiCaller.get({ hostname: 'flipkart.com' })
       .then(null, function(err) {
-        expect(err).to.be.an.instanceOf(NetworkError);
+        expect(NetworkError.isNetworkError(err)).to.equal(true);
         done();
       });
   });
