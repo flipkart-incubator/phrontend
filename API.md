@@ -1,21 +1,5 @@
 # API
 
-## Polyfill
-
-Phrontend depends on few of the latest browser features like,
-
-+ fetch
-+ Promise
-+ Object.assign
-
-Polyfill for these things is only on demand and is not done automatically. To polyfill things that Phrontend assumes to be present, you can do,
-
-```js
-import 'phrontend/lib/polyfill';
-```
-
-at the beginning of your application.
-
 ## Disptacher
 
 Phrontend uses [facebook's dispatcher](https://github.com/facebook/flux/blob/master/src/Dispatcher.js) and follows the concept of a single dispatcher. All actions are dispatched via this dispatcher.
@@ -102,4 +86,4 @@ class MyStore extends Store {
 
 ## ApiCaller
 
-ApiCaller is a singleton that uses [whatwg-fetch](https://github.com/github/fetch) to
+ApiCaller is a singleton that uses [whatwg-fetch](https://github.com/github/fetch)

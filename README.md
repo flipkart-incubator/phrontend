@@ -4,8 +4,6 @@
 [![Code Climate](https://codeclimate.com/github/flipkart-incubator/phrontend/badges/gpa.svg)](https://codeclimate.com/github/flipkart-incubator/phrontend)
 [![Test Coverage](https://codeclimate.com/github/flipkart-incubator/phrontend/badges/coverage.svg)](https://codeclimate.com/github/flipkart-incubator/phrontend/coverage)
 
-Framework to build rich UIs.
-
 Phrontend is a [flux](https://facebook.github.io/flux) implementation.
 
 ## Install
@@ -14,26 +12,18 @@ Phrontend is a [flux](https://facebook.github.io/flux) implementation.
 npm install phrontend --save
 ```
 
-## Dependencies
-
-From npm@3, you must install `react` and `react-router` manually. (https://github.com/npm/npm/releases/tag/v3.0.0 - Peer dependencies are no longer implicitly installed).
-
-`Optional` - [phrontend-webpack](https://github.com/flipkart-incubator/phrontend-webpack) - a webpack config maker customized for phrontend apps.
-
 ## Basic Usage
 
 Let's create a simple counter application.
 
-#### ActionTypes.js
-Defining the action types.
+#### Define some actions (ActionTypes.js)
+
 ```js
 export const INCREMENT_COUNTER = 'INCREMENT_COUNTER';
 export const DECREMENT_COUNTER = 'DECREMENT_COUNTER';
 ```
 
-#### CounterActionCreator.js
-
-Let's create the action creators for the defined actions.
+#### Define action creators
 
 ```js
 import {Dispatcher} from 'phrontend';
@@ -88,7 +78,7 @@ export default class extends React.Component {
     this.state = {
       step: 1,
       count: 0,
-    }
+    };
   }
   componentDidMount() {
     // subscribe to the change events published by the store this view
