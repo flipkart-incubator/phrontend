@@ -20,7 +20,7 @@
     "chai-spies": "~0.7.1",
     "eslint": "~3.7.0",
     "eslint-config-phrontend": "0.0.3",
-    "glob": "~7.0.3",
+    "glob": "~7.1.0",
     "istanbul": "~0.4.3",
     "mkdirp": "~0.5.1",
     "mocha": "~3.1.0",
