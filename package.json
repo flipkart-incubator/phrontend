@@ -18,7 +18,7 @@
     "babel-register": "~6.22.0",
     "chai": "~3.5.0",
     "chai-spies": "~0.7.1",
-    "eslint": "~3.14.0",
+    "eslint": "~3.16.1",
     "eslint-config-phrontend": "0.0.3",
     "glob": "~7.1.0",
     "istanbul": "~0.4.3",
