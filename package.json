@@ -9,7 +9,7 @@
   "description": "A framework to build rich UIs",
   "main": "lib/index.js",
   "devDependencies": {
-    "babel-cli": "~6.22.2",
+    "babel-cli": "~6.24.0",
     "babel-core": "~6.22.1",
     "babel-loader": "~6.2.4",
     "babel-plugin-transform-es2015-modules-commonjs": "~6.16.0",
