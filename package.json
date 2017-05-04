@@ -24,7 +24,7 @@
     "istanbul": "~0.4.3",
     "mkdirp": "~0.5.1",
     "mocha": "~3.2.0",
-    "webpack": "~1.13.0"
+    "webpack": "~2.5.0"
   },
   "scripts": {
     "build": "node util/build.js",
