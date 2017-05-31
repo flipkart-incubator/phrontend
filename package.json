@@ -16,7 +16,7 @@
     "babel-plugin-transform-strict-mode": "~6.22.0",
     "babel-preset-es2015": "~6.22.0",
     "babel-register": "~6.22.0",
-    "chai": "~3.5.0",
+    "chai": "~4.0.1",
     "chai-spies": "~0.7.1",
     "eslint": "~3.14.0",
     "eslint-config-phrontend": "0.0.3",
